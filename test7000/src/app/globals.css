@@ -1,0 +1,429 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Mobile Optimization and Performance Enhancements */
+@layer utilities {
+  /* Mobile-first responsive utilities */
+  .text-responsive {
+    @apply text-sm sm:text-base md:text-lg lg:text-xl;
+  }
+  
+  .text-responsive-heading {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+  }
+  
+  .text-responsive-subheading {
+    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl;
+  }
+  
+  /* Touch-friendly interactive elements */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  .touch-target-lg {
+    @apply min-h-[56px] min-w-[56px];
+  }
+  
+  /* Performance optimizations */
+  .gpu-accelerated {
+    @apply transform-gpu;
+  }
+  
+  .will-change-transform {
+    will-change: transform;
+  }
+  
+  .will-change-opacity {
+    will-change: opacity;
+  }
+  
+  
+  
+  /* Smooth scrolling */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+  
+  /* Image optimization */
+  .img-fluid {
+    @apply max-w-full h-auto;
+  }
+  
+  .img-cover {
+    @apply w-full h-full object-cover;
+  }
+  
+  .img-contain {
+    @apply w-full h-full object-contain;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  /* Reduce motion for better performance on mobile */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  
+  /* Optimize tap targets for mobile */
+  .btn-mobile {
+    @apply px-4 py-3 text-base min-h-[44px];
+  }
+  
+  /* Reduce padding on mobile for better space usage */
+  .section-mobile {
+    @apply px-4 py-12;
+  }
+  
+  /* Optimize text for mobile reading */
+  .text-mobile-readable {
+    @apply text-base leading-relaxed;
+  }
+  
+  /* Mobile-first card layouts */
+  .card-mobile-stack {
+    @apply flex flex-col space-y-4;
+  }
+}
+
+/* Performance critical animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Utility classes for performance */
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+/* Loading optimization */
+.lazy-load {
+  content-visibility: auto;
+  contain-intrinsic-size: 500px;
+}
+
+/* RTL (Right-to-Left) Support for Arabic */
+[dir="rtl"] {
+  /* RTL-specific adjustments */
+  .rtl-flip {
+    transform: scaleX(-1);
+  }
+  
+  /* RTL text alignment and spacing */
+  .rtl-text-right {
+    text-align: right;
+  }
+  
+  .rtl-text-left {
+    text-align: left;
+  }
+  
+  /* RTL padding and margin adjustments */
+  .rtl-padding-start {
+    padding-left: 0;
+    padding-right: 1rem;
+  }
+  
+  .rtl-padding-end {
+    padding-right: 0;
+    padding-left: 1rem;
+  }
+  
+  .rtl-margin-start {
+    margin-left: 0;
+    margin-right: 1rem;
+  }
+  
+  .rtl-margin-end {
+    margin-right: 0;
+    margin-left: 1rem;
+  }
+  
+  /* RTL flexbox adjustments */
+  .rtl-flex-row {
+    flex-direction: row-reverse;
+  }
+  
+  /* RTL border radius adjustments */
+  .rtl-rounded-l {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+  }
+  
+  .rtl-rounded-r {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+  }
+  
+  /* RTL specific improvements for form elements */
+  input[type="email"],
+  input[type="tel"],
+  input[type="text"],
+  textarea,
+  select {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  /* RTL button improvements */
+  .rtl-btn {
+    direction: rtl;
+  }
+  
+  /* RTL card and layout improvements */
+  .rtl-card {
+    direction: rtl;
+  }
+  
+  /* RTL navigation improvements */
+  .rtl-nav {
+    direction: rtl;
+  }
+  
+  /* RTL social media buttons */
+  .rtl-social {
+    direction: ltr;
+    display: inline-flex;
+  }
+}
+
+/* Arabic font optimization */
+@font-face {
+  font-family: 'Arabic Font';
+  src: local('Cairo'), local('Tahoma'), local('Arial');
+  font-display: swap;
+}
+
+[dir="rtl"] body {
+  font-family: var(--font-cairo), 'Cairo', 'Tahoma', 'Arial', sans-serif;
+}
+
+/* RTL responsive improvements */
+@media (max-width: 768px) {
+  [dir="rtl"] {
+    /* Mobile RTL adjustments */
+    .rtl-mobile-stack {
+      flex-direction: column;
+    }
+    
+    .rtl-mobile-text-right {
+      text-align: right;
+    }
+    
+    .rtl-mobile-reverse {
+      flex-direction: column-reverse;
+    }
+  }
+}
+
+/* RTL animation improvements */
+[dir="rtl"] {
+  .animate-slideInLeft {
+    animation-name: slideInRight;
+  }
+  
+  .animate-slideInRight {
+    animation-name: slideInLeft;
+  }
+}
+
+/* Print optimization */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-break-before {
+    page-break-before: always;
+  }
+  
+  .print-break-after {
+    page-break-after: always;
+  }
+  
+  .print-break-inside-avoid {
+    page-break-inside: avoid;
+  }
+}

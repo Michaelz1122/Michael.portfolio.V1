@@ -1,0 +1,1393 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
+import Navbar from '@/components/Navbar';
+import { 
+  Facebook, 
+  Instagram, 
+  Linkedin, 
+  Mail, 
+  Phone, 
+  Target, 
+  TrendingUp, 
+  Users, 
+  DollarSign,
+  BarChart3,
+  Megaphone,
+  Zap,
+  Award,
+  Briefcase,
+  MessageCircle,
+  ExternalLink,
+  Star,
+  CheckCircle,
+  ArrowRight,
+  ShoppingCart,
+  Users as Users2,
+  TrendingUp as TrendingUp2,
+  Lightbulb as LightbulbIcon,
+  Scale,
+  TrendingDown,
+  Eye,
+  ShoppingCart as ShoppingCartIcon,
+  Weight,
+  MessageSquare,
+  Globe,
+  MapPin,
+  Clock
+} from 'lucide-react';
+import { motion } from 'framer-motion';
+import Logo from '@/components/Logo';
+import ScrollReveal from '@/components/ScrollReveal';
+import StaggerContainer from '@/components/StaggerContainer';
+import ParallaxSection from '@/components/ParallaxSection';
+import FloatingElement from '@/components/FloatingElement';
+import PulseElement from '@/components/PulseElement';
+import PageLoader from '@/components/PageLoader';
+import SkillBar from '@/components/SkillBar';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { translations } from '@/lib/translations';
+
+export default function Portfolio() {
+  const [currentLang, setCurrentLang] = useState<'en' | 'ar'>('en');
+  const { toast } = useToast();
+  const prefersReducedMotion = useReducedMotion();
+  
+  // Conversion tracking state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+    service: '',
+    adBudget: '',
+    phone: ''
+  });
+
+  // Meta Pixel tracking simulation
+  useEffect(() => {
+    // Track page view
+    console.log('Page view tracked - Michael Zahy Portfolio');
+    // This would integrate with actual Meta Pixel
+    if (typeof window !== 'undefined') {
+      // fbq('track', 'PageView');
+    }
+  }, []);
+
+  const trackCTAClick = (ctaName: string) => {
+    console.log(`CTA clicked: ${ctaName}`);
+    // fbq('track', 'Lead', { content_name: ctaName });
+  };
+
+  const trackConversion = (conversionType: string) => {
+    console.log(`Conversion tracked: ${conversionType}`);
+    // fbq('track', 'Purchase', { content_name: conversionType });
+  };
+
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Handle service selection
+  const handleServiceSelect = (serviceName: string) => {
+    setFormData(prev => ({
+      ...prev,
+      service: serviceName
+    }));
+    scrollToSection('contact');
+    trackCTAClick(`Service_Selected_${serviceName}`);
+  };
+
+  // Handle ad budget selection
+  const handleBudgetSelect = (budget: string) => {
+    setFormData(prev => ({
+      ...prev,
+      adBudget: budget
+    }));
+    trackCTAClick(`Budget_Selected_${budget}`);
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (formData.name && formData.email && formData.message) {
+      setIsSubmitting(true);
+      try {
+        const response = await fetch('https://formspree.io/f/meolbrwd', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            service: formData.service,
+            adBudget: formData.adBudget,
+            message: formData.message,
+            _subject: `New Contact Form Submission from ${formData.name}`,
+          }),
+        });
+
+        if (response.ok) {
+          // Track lead conversion
+          trackConversion('Contact_Form_Submission');
+          
+          toast({
+            title: t.toastSuccess,
+            description: currentLang === 'en' ? "I'll get back to you within 24 hours." : "سأتواصل معك خلال 24 ساعة.",
+          });
+          setFormData({ name: '', email: '', message: '', service: '', adBudget: '', phone: '' });
+          setSubmitSuccess(true);
+          
+          // Reset success message after 5 seconds
+          setTimeout(() => setSubmitSuccess(false), 5000);
+        } else {
+          throw new Error('Form submission failed');
+        }
+      } catch (error) {
+        toast({
+          title: t.toastSubmissionError,
+          description: t.toastSubmissionErrorDesc,
+          variant: "destructive",
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
+    } else {
+      toast({
+        title: t.toastError,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const t = translations[currentLang as keyof typeof translations];
+
+  const handleWhatsAppClick = () => {
+    const message = currentLang === 'en' 
+      ? "Hi Michael, I'm interested in your media buying services. Can we discuss?" 
+      : "مرحباً مايكل، أنا مهتم بخدمات شراء الإعلانات الخاصة بك. هل يمكننا مناقشة ذلك؟";
+    const whatsappUrl = `https://wa.me/201069720311?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleFacebookClick = () => {
+    window.open('https://www.facebook.com/MichaelZahy1', '_blank');
+  };
+
+  const handleLinkedInClick = () => {
+    window.open('https://www.linkedin.com/in/michael-zahy', '_blank');
+  };
+
+  const handleEmailClick = () => {
+    window.open('mailto:Michaelzahy1@gmail.com', '_blank');
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <>
+      <PageLoader />
+      <div 
+        className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900"
+        dir={currentLang === 'ar' ? 'rtl' : 'ltr'}
+        lang={currentLang}
+      >
+        {/* Background Pattern */}
+        <div className="fixed inset-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0 bg-repeat" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundSize: '60px 60px'
+        }}></div>
+      </div>
+      
+      <Navbar currentLang={currentLang} setCurrentLang={setCurrentLang} />
+
+      {/* Hero Section */}
+      <section id="hero" className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white pt-16">
+        <div className="absolute inset-0 bg-black/30"></div>
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0">
+          <motion.div 
+            className="absolute top-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-xl opacity-30"
+            animate={{
+              scale: [1, 1.1, 1],
+              x: [0, 20, 0],
+              y: [0, -20, 0],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute top-40 right-10 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-xl opacity-30"
+            animate={{
+              scale: [1, 1.1, 1],
+              x: [0, -20, 0],
+              y: [0, 20, 0],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute -bottom-8 left-20 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-25"
+            animate={{
+              scale: [1, 1.1, 1],
+              x: [0, 20, 0],
+              y: [0, -20, 0],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        </div>
+        
+        <div className="relative container mx-auto px-4 py-24 md:py-32">
+          <div className="max-w-4xl mx-auto text-center">
+            <ScrollReveal direction="up" delay={0.2}>
+              <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-100 to-white">
+                {t.title}
+              </h1>
+              <p className="text-xl md:text-2xl text-blue-100 mb-6">
+                {t.subtitle}
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 mb-8">
+                <FloatingElement delay={0.1}>
+                  <Badge variant="secondary" className="text-blue-900 bg-white/90">
+                    {t.facebook}
+                  </Badge>
+                </FloatingElement>
+                <FloatingElement delay={0.2}>
+                  <Badge variant="secondary" className="text-blue-900 bg-white/90">
+                    {t.performanceMarketing}
+                  </Badge>
+                </FloatingElement>
+                <FloatingElement delay={0.3}>
+                  <Badge variant="secondary" className="text-blue-900 bg-white/90">
+                    {t.mediaBuying}
+                  </Badge>
+                </FloatingElement>
+                <FloatingElement delay={0.4}>
+                  <Badge variant="secondary" className="text-blue-900 bg-white/90">
+                    {t.growth}
+                  </Badge>
+                </FloatingElement>
+              </div>
+              <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                {t.heroText}
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                <FloatingElement delay={0.1}>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-yellow-400 mb-1">EGP 2.5M+</div>
+                    <div className="text-sm md:text-base text-blue-100">{t.adSpend}</div>
+                  </div>
+                </FloatingElement>
+                <FloatingElement delay={0.2}>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-yellow-400 mb-1">4.2x</div>
+                    <div className="text-sm md:text-base text-blue-100">{t.roiIncrease}</div>
+                  </div>
+                </FloatingElement>
+                <FloatingElement delay={0.3}>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-yellow-400 mb-1">50+</div>
+                    <div className="text-sm md:text-base text-blue-100">{t.campaigns}</div>
+                  </div>
+                </FloatingElement>
+                <FloatingElement delay={0.4}>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-yellow-400 mb-1">3+</div>
+                    <div className="text-sm md:text-base text-blue-100">{t.experience}</div>
+                  </div>
+                </FloatingElement>
+              </div>
+              <PulseElement delay={0.5}>
+                <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white p-4 rounded-lg mb-8 max-w-2xl mx-auto">
+                  <div className="flex items-center justify-center gap-2">
+                    <Clock className="w-5 h-5" />
+                    <span className="font-bold">Limited Time: Free Meta Ads Audit + 20% OFF First Month!</span>
+                  </div>
+                </div>
+              </PulseElement>
+              <PulseElement delay={0.6}>
+                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg mb-8 max-w-3xl mx-auto">
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <Star className="w-5 h-5 text-yellow-400" />
+                    <span className="font-semibold text-white">Trusted by 50+ Businesses in Egypt</span>
+                    <Star className="w-5 h-5 text-yellow-400" />
+                  </div>
+                  <p className="text-blue-100 text-center">"Michael helped us achieve 11.1x ROAS in just 3 months. His expertise in Facebook ads is unmatched!"</p>
+                  <p className="text-yellow-400 text-sm mt-2">- Dr. Remon Moner, Pharmacy Owner</p>
+                </div>
+              </PulseElement>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <ScrollReveal direction="up" delay={0.7}>
+                  <Button 
+                    size="lg" 
+                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold text-lg px-8 py-4 shadow-lg hover:shadow-xl transition-all duration-300"
+                    onClick={() => scrollToSection('contact')}
+                  >
+                    {t.getInTouchButton}
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.8}>
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="border-white text-white hover:bg-white hover:text-blue-600 font-bold text-lg px-8 py-4 shadow-lg hover:shadow-xl transition-all duration-300"
+                    onClick={() => scrollToSection('case-studies')}
+                  >
+                    {t.viewWork}
+                  </Button>
+                </ScrollReveal>
+              </div>
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* About Section */}
+      <section id="about" className="relative py-20 bg-gradient-to-br from-white via-blue-50 to-indigo-50 dark:from-slate-800 dark:via-blue-900/20 dark:to-indigo-900/20">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-repeat" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%233b82f6' fill-opacity='0.02'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10S0 21.7 0 30s4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
+        <div className="relative container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <ScrollReveal direction="up" delay={0.1}>
+              <div className="text-center mb-16 about-section">
+                <div className="inline-flex items-center gap-2 mb-4 section-header-decoration">
+                  <div className="w-12 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
+                  <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm uppercase tracking-wider">
+                    {t.about}
+                  </span>
+                  <div className="w-12 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></div>
+                </div>
+                <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-800 to-slate-600 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
+                  {t.about}
+                </h2>
+                <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                  {t.aboutDesc}
+                </p>
+              </div>
+            </ScrollReveal>
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <ScrollReveal direction="right" delay={0.2}>
+                <div>
+                  <p className="text-lg text-slate-700 dark:text-slate-300 mb-6">
+                    {t.aboutText1}
+                  </p>
+                  <p className="text-lg text-slate-700 dark:text-slate-300 mb-6">
+                    {t.aboutText2}
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <ScrollReveal direction="up" delay={0.3}>
+                      <div className="flex items-center gap-2">
+                        <Target className="w-5 h-5 text-blue-600" />
+                        <span className="text-slate-700 dark:text-slate-300">{t.resultsDriven}</span>
+                      </div>
+                    </ScrollReveal>
+                    <ScrollReveal direction="up" delay={0.4}>
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-green-600" />
+                        <span className="text-slate-700 dark:text-slate-300">{t.dataFocused}</span>
+                      </div>
+                    </ScrollReveal>
+                    <ScrollReveal direction="up" delay={0.5}>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-5 h-5 text-purple-600" />
+                        <span className="text-slate-700 dark:text-slate-300">{t.clientCentric}</span>
+                      </div>
+                    </ScrollReveal>
+                    <ScrollReveal direction="up" delay={0.6}>
+                      <div className="flex items-center gap-2">
+                        <Zap className="w-5 h-5 text-yellow-600" />
+                        <span className="text-slate-700 dark:text-slate-300">{t.innovative}</span>
+                      </div>
+                    </ScrollReveal>
+                  </div>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal direction="left" delay={0.2}>
+                <div className="grid grid-cols-2 gap-4">
+                  <Card className="text-center hover:shadow-lg transition-all duration-300">
+                    <CardContent className="pt-6">
+                      <DollarSign className="w-8 h-8 mx-auto mb-2 text-green-600" />
+                      <div className="stats-number text-2xl font-bold text-slate-800 dark:text-slate-100">EGP 200K+</div>
+                      <div className="stats-label text-sm text-slate-600 dark:text-slate-400">{t.adSpend}</div>
+                    </CardContent>
+                  </Card>
+                  <Card className="text-center hover:shadow-lg transition-all duration-300">
+                    <CardContent className="pt-6">
+                      <BarChart3 className="w-8 h-8 mx-auto mb-2 text-blue-600" />
+                      <div className="stats-number text-2xl font-bold text-slate-800 dark:text-slate-100">3.2x</div>
+                      <div className="stats-label text-sm text-slate-600 dark:text-slate-400">{t.roiIncrease}</div>
+                    </CardContent>
+                  </Card>
+                  <Card className="text-center hover:shadow-lg transition-all duration-300">
+                    <CardContent className="pt-6">
+                      <Megaphone className="w-8 h-8 mx-auto mb-2 text-purple-600" />
+                      <div className="stats-number text-2xl font-bold text-slate-800 dark:text-slate-100">15+</div>
+                      <div className="stats-label text-sm text-slate-600 dark:text-slate-400">{t.campaigns}</div>
+                    </CardContent>
+                  </Card>
+                  <Card className="text-center hover:shadow-lg transition-all duration-300">
+                    <CardContent className="pt-6">
+                      <Award className="w-8 h-8 mx-auto mb-2 text-yellow-600" />
+                      <div className="stats-number text-2xl font-bold text-slate-800 dark:text-slate-100">1+</div>
+                      <div className="stats-label text-sm text-slate-600 dark:text-slate-400">{t.experience}</div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </ScrollReveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Case Studies Section */}
+      <section id="case-studies" className="relative py-20 bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50/50 dark:from-slate-800 dark:via-blue-900/30 dark:to-indigo-900/30">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-repeat" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%238b5cf6' fill-opacity='0.03'%3E%3Cpath d='M30 30c0-8.3-6.7-15-15-15S0 21.7 0 30s6.7 15 15 15 15-6.7 15-15zm30 0c0-8.3-6.7-15-15-15s-15 6.7-15 15 6.7 15 15 15 15-6.7 15-15z'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '60px 60px'
+          }}></div>
+        </div>
+        <div className="relative container mx-auto px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16 section-header">
+              <ScrollReveal direction="up" delay={0.1}>
+                <div className="inline-flex items-center gap-2 mb-4 section-header-decoration">
+                  <div className="w-12 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></div>
+                  <span className="text-purple-600 dark:text-purple-400 font-semibold text-sm uppercase tracking-wider">
+                    {t.caseStudies}
+                  </span>
+                  <div className="w-12 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal direction="up" delay={0.2}>
+                <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-800 to-slate-600 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
+                  {t.caseStudies}
+                </h2>
+                <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                  {t.caseStudiesDesc}
+                </p>
+              </ScrollReveal>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              <ScrollReveal direction="up" delay={0.3}>
+                <Card className="h-full hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-0 bg-white dark:bg-slate-800 overflow-hidden">
+                  <CardHeader className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white p-6">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4">
+                        <Weight className="w-8 h-8 text-white" />
+                      </div>
+                      <CardTitle className="text-2xl mb-2">{t.caseStudy1Title}</CardTitle>
+                      <CardDescription className="text-blue-100">{t.caseStudy1Desc}</CardDescription>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-center gap-2 text-blue-600 font-semibold text-lg mb-4">
+                      <Star className="w-5 h-5" />
+                      <span>{t.caseStudy1Result}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">11.1x</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">ROAS</div>
+                      </div>
+                      <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-green-600 dark:text-green-400">285</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">Orders</div>
+                      </div>
+                      <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">EGP 500</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">AOV</div>
+                      </div>
+                      <div className="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">EGP 45</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">CPP</div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-300 text-sm">Platform</span>
+                        <span className="text-blue-600 font-semibold text-sm">Facebook & Instagram</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-300 text-sm">Location</span>
+                        <span className="text-blue-600 font-semibold text-sm">Egypt</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-300 text-sm">Campaign Duration</span>
+                        <span className="text-blue-600 font-semibold text-sm">3 Months</span>
+                      </div>
+                    </div>
+                    <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white">
+                      View Full Case Study
+                    </Button>
+                  </CardContent>
+                </Card>
+              </ScrollReveal>
+              <ScrollReveal direction="up" delay={0.4}>
+                <Card className="h-full hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-0 bg-white dark:bg-slate-800 overflow-hidden">
+                  <CardHeader className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white p-6">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4">
+                        <ShoppingCart className="w-8 h-8 text-white" />
+                      </div>
+                      <CardTitle className="text-2xl mb-2">{t.caseStudy2Title}</CardTitle>
+                      <CardDescription className="text-purple-100">{t.caseStudy2Desc}</CardDescription>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-center gap-2 text-purple-600 font-semibold text-lg mb-4">
+                      <Star className="w-5 h-5" />
+                      <span>{t.caseStudy2Result}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">10.8x</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">ROAS</div>
+                      </div>
+                      <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-green-600 dark:text-green-400">1,247</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">Sales</div>
+                      </div>
+                      <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">3.8%</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">CTR</div>
+                      </div>
+                      <div className="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">EGP 85</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">CPA</div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-300 text-sm">Platform</span>
+                        <span className="text-purple-600 font-semibold text-sm">Facebook & Instagram</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-300 text-sm">Location</span>
+                        <span className="text-purple-600 font-semibold text-sm">Egypt</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-300 text-sm">Marketing Objective</span>
+                        <span className="text-purple-600 font-semibold text-sm">Conversion Campaign</span>
+                      </div>
+                    </div>
+                    <Button className="w-full mt-4 bg-purple-600 hover:bg-purple-700 text-white">
+                      View Full Case Study
+                    </Button>
+                  </CardContent>
+                </Card>
+              </ScrollReveal>
+              <ScrollReveal direction="up" delay={0.5}>
+                <Card className="h-full hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-0 bg-white dark:bg-slate-800 overflow-hidden">
+                  <CardHeader className="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 text-white p-6">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4">
+                        <Users className="w-8 h-8 text-white" />
+                      </div>
+                      <CardTitle className="text-2xl mb-2">{t.caseStudy3Title}</CardTitle>
+                      <CardDescription className="text-green-100">{t.caseStudy3Desc}</CardDescription>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-center gap-2 text-green-600 font-semibold text-lg mb-4">
+                      <Star className="w-5 h-5" />
+                      <span>{t.caseStudy3Result}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-green-600 dark:text-green-400">60%</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">Cost Reduction</div>
+                      </div>
+                      <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">156</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">Qualified Leads</div>
+                      </div>
+                      <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">4.2%</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">CTR</div>
+                      </div>
+                      <div className="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg text-center">
+                        <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">EGP 120</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">CPL</div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-300 text-sm">Platform</span>
+                        <span className="text-green-600 font-semibold text-sm">Facebook & Instagram</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-300 text-sm">Location</span>
+                        <span className="text-green-600 font-semibold text-sm">Egypt</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-300 text-sm">Marketing Objective</span>
+                        <span className="text-green-600 font-semibold text-sm">Conversion Campaign</span>
+                      </div>
+                    </div>
+                    <Button className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white">
+                      View Full Case Study
+                    </Button>
+                  </CardContent>
+                </Card>
+              </ScrollReveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Skills Section */}
+      <section id="skills" className="relative py-20 bg-gradient-to-br from-indigo-50 via-purple-50/50 to-blue-50/50 dark:from-slate-800 dark:via-purple-900/20 dark:to-blue-900/20">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-repeat" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Cpath d='M50 50c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm30 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '80px 80px'
+          }}></div>
+        </div>
+        <div className="relative container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <ScrollReveal direction="up" delay={0.1}>
+              <div className="text-center mb-16 section-header">
+                <div className="inline-flex items-center gap-2 mb-4">
+                  <div className="w-12 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full"></div>
+                  <span className="text-indigo-600 dark:text-indigo-400 font-semibold text-sm uppercase tracking-wider">
+                    {t.skills}
+                  </span>
+                  <div className="w-12 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full"></div>
+                </div>
+                <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-800 to-slate-600 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
+                  {t.skills}
+                </h2>
+                <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                  {t.skillsDesc}
+                </p>
+              </div>
+            </ScrollReveal>
+            <div className="grid md:grid-cols-2 gap-8">
+              <ScrollReveal direction="right" delay={0.2}>
+                <Card className="hover:shadow-lg transition-all duration-300">
+                  <CardHeader className="text-center">
+                    <CardTitle className="flex items-center gap-2">
+                      <Facebook className="w-5 h-5 text-blue-600" />
+                      {t.facebookAds}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <div className="space-y-4">
+                      <SkillBar skill={t.campaignSetup} level="advanced" delay={0.1} currentLang={currentLang} />
+                      <SkillBar skill={t.adCreative} level="intermediate" delay={0.2} currentLang={currentLang} />
+                      <SkillBar skill={t.audienceTargeting} level="advanced" delay={0.3} currentLang={currentLang} />
+                      <SkillBar skill={t.abTesting} level="intermediate" delay={0.4} currentLang={currentLang} />
+                    </div>
+                  </CardContent>
+                </Card>
+              </ScrollReveal>
+              <ScrollReveal direction="left" delay={0.2}>
+                <Card className="hover:shadow-lg transition-all duration-300">
+                  <CardHeader className="text-center">
+                    <CardTitle className="flex items-center gap-2">
+                      <BarChart3 className="w-5 h-5 text-purple-600" />
+                      {t.analytics}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <div className="space-y-4">
+                      <SkillBar skill={t.performanceAnalysis} level="expert" delay={0.1} currentLang={currentLang} />
+                      <SkillBar skill={t.roiOptimization} level="advanced" delay={0.2} currentLang={currentLang} />
+                      <SkillBar skill={t.conversionTracking} level="advanced" delay={0.3} currentLang={currentLang} />
+                      <SkillBar skill={t.budgetManagement} level="intermediate" delay={0.4} currentLang={currentLang} />
+                    </div>
+                  </CardContent>
+                </Card>
+              </ScrollReveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Services Section */}
+      <section id="services" className="relative py-20 bg-gradient-to-br from-white via-blue-50 to-indigo-50 dark:from-slate-800 dark:via-blue-900/20 dark:to-indigo-900/20">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-repeat" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%233b82f6' fill-opacity='0.02'%3E%3Cpath d='M30 30c0-8.3-6.7-15-15-15S0 21.7 0 30s6.7 15 15 15 15-6.7 15-15zm30 0c0-8.3-6.7-15-15-15s-15 6.7-15 15 6.7 15 15 15 15-6.7 15-15z'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '60px 60px'
+          }}></div>
+        </div>
+        <div className="relative container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <ScrollReveal direction="up" delay={0.1}>
+              <div className="text-center mb-16 section-header">
+                <div className="inline-flex items-center gap-2 mb-4 section-header-decoration">
+                  <div className="w-12 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
+                  <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm uppercase tracking-wider">
+                    {t.services}
+                  </span>
+                  <div className="w-12 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></div>
+                </div>
+                <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-800 to-slate-600 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
+                  {t.services}
+                </h2>
+                <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                  {t.servicesDesc}
+                </p>
+              </div>
+            </ScrollReveal>
+            
+            {/* Service Selection */}
+            <ScrollReveal direction="up" delay={0.2}>
+              <Card className="mb-12 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-2xl">{t.chooseYourService}</CardTitle>
+                  <CardDescription>{t.whatService}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {[
+                      t.facebookAdsService,
+                      t.campaignOptimization,
+                      t.audienceTargetingService,
+                      t.socialMediaStrategy,
+                      t.performanceAnalytics,
+                      t.budgetManagementService
+                    ].map((service, index) => (
+                      <Button
+                        key={service}
+                        variant={formData.service === service ? "default" : "outline"}
+                        className="h-auto p-4 flex flex-col items-center text-center hover:shadow-md transition-all duration-300"
+                        onClick={() => handleServiceSelect(service)}
+                      >
+                        <Briefcase className="w-6 h-6 mb-2" />
+                        <span className="text-sm font-medium">{service}</span>
+                      </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </ScrollReveal>
+
+            {/* Budget Selection */}
+            <ScrollReveal direction="up" delay={0.3}>
+              <Card className="mb-12 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-2xl">{t.adBudgetRange}</CardTitle>
+                  <CardDescription>{t.selectBudget}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[
+                      t.budgetOption1,
+                      t.budgetOption2,
+                      t.budgetOption3,
+                      t.budgetOption4
+                    ].map((budget, index) => (
+                      <Button
+                        key={budget}
+                        variant={formData.adBudget === budget ? "default" : "outline"}
+                        className="h-auto p-4 flex flex-col items-center text-center hover:shadow-md transition-all duration-300"
+                        onClick={() => handleBudgetSelect(budget)}
+                      >
+                        <DollarSign className="w-6 h-6 mb-2" />
+                        <span className="text-sm font-medium">{budget}</span>
+                      </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </ScrollReveal>
+
+            <StaggerContainer>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <ScrollReveal direction="up" delay={0.4}>
+                  <Card className="h-full hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-0 bg-white dark:bg-slate-800 overflow-hidden">
+                    <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+                      <CardTitle className="flex items-center gap-2">
+                        <Megaphone className="w-6 h-6" />
+                        {t.facebookAdsService}
+                      </CardTitle>
+                      <CardDescription className="text-blue-100">
+                        {t.facebookAdsDesc}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">Campaign Strategy</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">Creative Development</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">Performance Optimization</span>
+                        </div>
+                      </div>
+                      <Button 
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={() => handleServiceSelect(t.facebookAdsService)}
+                      >
+                        {t.selectService}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.5}>
+                  <Card className="h-full hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-0 bg-white dark:bg-slate-800 overflow-hidden">
+                    <CardHeader className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6">
+                      <CardTitle className="flex items-center gap-2">
+                        <BarChart3 className="w-6 h-6" />
+                        {t.campaignOptimization}
+                      </CardTitle>
+                      <CardDescription className="text-purple-100">
+                        {t.campaignOptimizationDesc}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">A/B Testing</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">ROI Analysis</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">Continuous Improvement</span>
+                        </div>
+                      </div>
+                      <Button 
+                        className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                        onClick={() => handleServiceSelect(t.campaignOptimization)}
+                      >
+                        {t.selectService}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.6}>
+                  <Card className="h-full hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-0 bg-white dark:bg-slate-800 overflow-hidden">
+                    <CardHeader className="bg-gradient-to-r from-green-600 to-teal-600 text-white p-6">
+                      <CardTitle className="flex items-center gap-2">
+                        <Target className="w-6 h-6" />
+                        {t.audienceTargetingService}
+                      </CardTitle>
+                      <CardDescription className="text-green-100">
+                        {t.audienceTargetingDesc}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">Demographic Targeting</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">Interest-Based Targeting</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">Custom Audiences</span>
+                        </div>
+                      </div>
+                      <Button 
+                        className="w-full bg-green-600 hover:bg-green-700 text-white"
+                        onClick={() => handleServiceSelect(t.audienceTargetingService)}
+                      >
+                        {t.selectService}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </ScrollReveal>
+              </div>
+            </StaggerContainer>
+          </div>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Pricing Section */}
+      <section id="pricing" className="relative py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-800 dark:via-blue-900/20 dark:to-indigo-900/20">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-repeat" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%238b5cf6' fill-opacity='0.03'%3E%3Cpath d='M30 30c0-8.3-6.7-15-15-15S0 21.7 0 30s6.7 15 15 15 15-6.7 15-15zm30 0c0-8.3-6.7-15-15-15s-15 6.7-15 15 6.7 15 15 15 15-6.7 15-15z'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '60px 60px'
+          }}></div>
+        </div>
+        <div className="relative container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <ScrollReveal direction="up" delay={0.1}>
+              <div className="text-center mb-16 section-header">
+                <div className="inline-flex items-center gap-2 mb-4 section-header-decoration">
+                  <div className="w-12 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></div>
+                  <span className="text-purple-600 dark:text-purple-400 font-semibold text-sm uppercase tracking-wider">
+                    {t.pricing}
+                  </span>
+                  <div className="w-12 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
+                </div>
+                <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-800 to-slate-600 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
+                  {t.pricing}
+                </h2>
+                <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                  {t.pricingDesc}
+                </p>
+              </div>
+            </ScrollReveal>
+            <StaggerContainer>
+              <div className="grid md:grid-cols-3 gap-8">
+                <ScrollReveal direction="up" delay={0.2}>
+                  <Card className="h-full hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-0 bg-white dark:bg-slate-800 overflow-hidden">
+                    <CardHeader className="text-center p-6">
+                      <CardTitle className="text-2xl">{t.basicPlan}</CardTitle>
+                      <div className="mt-4">
+                        <span className="text-4xl font-bold text-blue-600">{t.basicPrice}</span>
+                        <span className="text-slate-600">/{t.basicPeriod}</span>
+                      </div>
+                      <CardDescription className="mt-2">{t.basicDesc}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.basicFeature1}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.basicFeature2}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.basicFeature3}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.basicFeature4}</span>
+                        </div>
+                      </div>
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                        {t.choosePlan}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.3}>
+                  <Card className="h-full hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-0 bg-white dark:bg-slate-800 overflow-hidden relative">
+                    <div className="absolute top-0 right-0 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-3 py-1 rounded-bl-lg rounded-tr-lg text-sm font-semibold">
+                      {t.popular}
+                    </div>
+                    <CardHeader className="text-center p-6">
+                      <CardTitle className="text-2xl">{t.professionalPlan}</CardTitle>
+                      <div className="mt-4">
+                        <span className="text-4xl font-bold text-purple-600">{t.professionalPrice}</span>
+                        <span className="text-slate-600">/{t.professionalPeriod}</span>
+                      </div>
+                      <CardDescription className="mt-2">{t.professionalDesc}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.professionalFeature1}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.professionalFeature2}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.professionalFeature3}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.professionalFeature4}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.professionalFeature5}</span>
+                        </div>
+                      </div>
+                      <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                        {t.choosePlan}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.4}>
+                  <Card className="h-full hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-0 bg-white dark:bg-slate-800 overflow-hidden">
+                    <CardHeader className="text-center p-6">
+                      <CardTitle className="text-2xl">{t.enterprisePlan}</CardTitle>
+                      <div className="mt-4">
+                        <span className="text-4xl font-bold text-green-600">{t.enterprisePrice}</span>
+                        <span className="text-slate-600">/{t.enterprisePeriod}</span>
+                      </div>
+                      <CardDescription className="mt-2">{t.enterpriseDesc}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.enterpriseFeature1}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.enterpriseFeature2}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.enterpriseFeature3}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.enterpriseFeature4}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.enterpriseFeature5}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-sm">{t.enterpriseFeature6}</span>
+                        </div>
+                      </div>
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                        {t.contactForPricing}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </ScrollReveal>
+              </div>
+            </StaggerContainer>
+          </div>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Contact Section */}
+      <section id="contact" className="relative py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-repeat" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M50 50c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm30 0c0-11-9-20-15-20s-15 9-15 20 9 20 15 20 15-9 15-20z'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '80px 80px'
+          }}></div>
+        </div>
+        <div className="relative container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <ScrollReveal direction="up" delay={0.1}>
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center gap-2 mb-4 section-header-decoration">
+                  <div className="w-12 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+                  <span className="text-blue-300 font-semibold text-sm uppercase tracking-wider">
+                    {t.contact}
+                  </span>
+                  <div className="w-12 h-1 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full"></div>
+                </div>
+                <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                  {t.contact}
+                </h2>
+                <p className="text-xl text-blue-100 mb-8">
+                  {t.contactDesc}
+                </p>
+              </div>
+            </ScrollReveal>
+            
+            <div className="grid md:grid-cols-2 gap-12">
+              <ScrollReveal direction="right" delay={0.2}>
+                <div>
+                  <h3 className="text-2xl font-semibold mb-6">{t.getInTouch}</h3>
+                  <p className="text-blue-100 mb-8">
+                    {t.getInTouchDesc}
+                  </p>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Mail className="w-5 h-5 text-blue-400" />
+                      <a href={`mailto:${t.emailContact}`} className="text-blue-100 hover:text-white transition-colors">
+                        {t.emailContact}
+                      </a>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Phone className="w-5 h-5 text-blue-400" />
+                      <a href={`tel:${t.phoneContact}`} className="text-blue-100 hover:text-white transition-colors">
+                        {t.phoneContact}
+                      </a>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <MessageCircle className="w-5 h-5 text-blue-400" />
+                      <button 
+                        onClick={handleWhatsAppClick}
+                        className="text-blue-100 hover:text-white transition-colors"
+                      >
+                        {t.whatsapp}
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Facebook className="w-5 h-5 text-blue-400" />
+                      <button 
+                        onClick={handleFacebookClick}
+                        className="text-blue-100 hover:text-white transition-colors"
+                      >
+                        {t.facebookContact}
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Linkedin className="w-5 h-5 text-blue-400" />
+                      <button 
+                        onClick={handleLinkedInClick}
+                        className="text-blue-100 hover:text-white transition-colors"
+                      >
+                        {t.linkedinContact}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+              
+              <ScrollReveal direction="left" delay={0.2}>
+                <Card className="bg-white/10 backdrop-blur-sm border-white/20">
+                  <CardHeader>
+                    <CardTitle className="text-white">{t.sendMessage}</CardTitle>
+                    <CardDescription className="text-blue-100">
+                      {t.sendMessageDesc}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-blue-100 mb-1">
+                          {t.name} *
+                        </label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          placeholder={t.yourName}
+                          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-blue-100 mb-1">
+                          {t.email} *
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder={t.yourEmail}
+                          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-blue-100 mb-1">
+                          {t.phone}
+                        </label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          placeholder={t.yourPhone}
+                          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-blue-100 mb-1">
+                          {t.whatService}
+                        </label>
+                        <select
+                          name="service"
+                          value={formData.service}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        >
+                          <option value="" className="text-slate-800">{t.chooseYourService}</option>
+                          <option value={t.facebookAdsService} className="text-slate-800">{t.facebookAdsService}</option>
+                          <option value={t.campaignOptimization} className="text-slate-800">{t.campaignOptimization}</option>
+                          <option value={t.audienceTargetingService} className="text-slate-800">{t.audienceTargetingService}</option>
+                          <option value={t.socialMediaStrategy} className="text-slate-800">{t.socialMediaStrategy}</option>
+                          <option value={t.performanceAnalytics} className="text-slate-800">{t.performanceAnalytics}</option>
+                          <option value={t.budgetManagementService} className="text-slate-800">{t.budgetManagementService}</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-blue-100 mb-1">
+                          {t.adBudgetRange}
+                        </label>
+                        <select
+                          name="adBudget"
+                          value={formData.adBudget}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        >
+                          <option value="" className="text-slate-800">{t.selectBudget}</option>
+                          <option value={t.budgetOption1} className="text-slate-800">{t.budgetOption1}</option>
+                          <option value={t.budgetOption2} className="text-slate-800">{t.budgetOption2}</option>
+                          <option value={t.budgetOption3} className="text-slate-800">{t.budgetOption3}</option>
+                          <option value={t.budgetOption4} className="text-slate-800">{t.budgetOption4}</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-blue-100 mb-1">
+                          {t.message} *
+                        </label>
+                        <textarea
+                          name="message"
+                          value={formData.message}
+                          onChange={handleInputChange}
+                          placeholder={t.tellMe}
+                          rows={4}
+                          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? 'Sending...' : t.sendButton}
+                      </Button>
+                    </form>
+                    {submitSuccess && (
+                      <div className="mt-4 p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
+                        <p className="text-green-400 text-sm">
+                          {t.toastSuccess}
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </ScrollReveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative bg-slate-900 text-white py-12">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-repeat" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10S0 21.7 0 30s4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
+        <div className="relative container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
+              <div className="text-center md:text-left">
+                <Logo />
+                <p className="mt-4 text-slate-400">
+                  {t.footerText}
+                </p>
+              </div>
+              <div className="text-center">
+                <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+                <div className="space-y-2">
+                  <button 
+                    onClick={() => scrollToSection('about')}
+                    className="block text-slate-400 hover:text-white transition-colors"
+                  >
+                    {t.about}
+                  </button>
+                  <button 
+                    onClick={() => scrollToSection('services')}
+                    className="block text-slate-400 hover:text-white transition-colors"
+                  >
+                    {t.services}
+                  </button>
+                  <button 
+                    onClick={() => scrollToSection('case-studies')}
+                    className="block text-slate-400 hover:text-white transition-colors"
+                  >
+                    {t.caseStudies}
+                  </button>
+                  <button 
+                    onClick={() => scrollToSection('pricing')}
+                    className="block text-slate-400 hover:text-white transition-colors"
+                  >
+                    {t.pricing}
+                  </button>
+                </div>
+              </div>
+              <div className="text-center md:text-right">
+                <h3 className="text-lg font-semibold mb-4">Legal</h3>
+                <div className="space-y-2">
+                  <button 
+                    onClick={() => window.open('/terms-of-use', '_blank')}
+                    className="block text-slate-400 hover:text-white transition-colors"
+                  >
+                    {currentLang === 'en' ? 'Terms of Use' : 'شروط الاستخدام'}
+                  </button>
+                  <button 
+                    onClick={() => window.open('/privacy-policy', '_blank')}
+                    className="block text-slate-400 hover:text-white transition-colors"
+                  >
+                    {currentLang === 'en' ? 'Privacy Policy' : 'سياسة الخصوصية'}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="border-t border-slate-800 pt-8 text-center">
+              <p className="text-slate-400">
+                © 2024 Michael Zahy. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+      </div>
+    </>
+  );
+}

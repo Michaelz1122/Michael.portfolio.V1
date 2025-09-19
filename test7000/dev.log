@@ -1,0 +1,139 @@
+[33m[nodemon] 3.1.10[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): server.ts src/**/*[39m
+[33m[nodemon] watching extensions: ts,tsx,js,jsx[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3000
+> Socket.IO server running at ws://0.0.0.0:3000/api/socketio
+ ○ Compiling / ...
+ ✓ Compiled / in 8s (1740 modules)
+ GET / 200 in 8792ms
+ GET / 200 in 287ms
+ GET / 200 in 270ms
+ GET / 200 in 298ms
+ GET / 200 in 275ms
+ ⚠ Cross origin request detected from preview-chat-6cc7f49f-be07-4e45-a1ee-960b9322e5b7.space.z.ai to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET / 200 in 278ms
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3000
+> Socket.IO server running at ws://0.0.0.0:3000/api/socketio
+ ○ Compiling / ...
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3000
+> Socket.IO server running at ws://0.0.0.0:3000/api/socketio
+ ○ Compiling / ...
+ ✓ Compiled / in 7.9s (1740 modules)
+ GET / 200 in 2334ms
+ ⚠ Cross origin request detected from preview-chat-6cc7f49f-be07-4e45-a1ee-960b9322e5b7.space.z.ai to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ○ Compiling /api/send-email ...
+ ⨯ ./src/app/api/send-email/route.ts:2:1
+Module not found: Can't resolve 'nodemailer'
+  1 | import { NextRequest, NextResponse } from 'next/server';
+> 2 | import nodemailer from 'nodemailer';
+    | ^
+  3 |
+  4 | export async function POST(request: NextRequest) {
+  5 |   try {
+
+https://nextjs.org/docs/messages/module-not-found
+ ⨯ ./src/app/api/send-email/route.ts:2:1
+Module not found: Can't resolve 'nodemailer'
+  1 | import { NextRequest, NextResponse } from 'next/server';
+> 2 | import nodemailer from 'nodemailer';
+    | ^
+  3 |
+  4 | export async function POST(request: NextRequest) {
+  5 |   try {
+
+https://nextjs.org/docs/messages/module-not-found
+ ⨯ ./src/app/api/send-email/route.ts:2:1
+Module not found: Can't resolve 'nodemailer'
+  1 | import { NextRequest, NextResponse } from 'next/server';
+> 2 | import nodemailer from 'nodemailer';
+    | ^
+  3 |
+  4 | export async function POST(request: NextRequest) {
+  5 |   try {
+
+https://nextjs.org/docs/messages/module-not-found
+ POST /api/send-email 500 in 7590ms
+ ✓ Compiled / in 386ms (927 modules)
+ GET / 200 in 1004ms
+   Reload env: .env
+ ✓ Compiled in 824ms (2005 modules)
+ GET / 200 in 508ms
+ GET / 200 in 278ms
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3000
+> Socket.IO server running at ws://0.0.0.0:3000/api/socketio
+ ○ Compiling / ...
+ ✓ Compiled / in 8s (1740 modules)
+ GET / 200 in 6797ms
+ GET / 200 in 271ms
+ ⚠ Cross origin request detected from preview-chat-6cc7f49f-be07-4e45-a1ee-960b9322e5b7.space.z.ai to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3000
+> Socket.IO server running at ws://0.0.0.0:3000/api/socketio
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3000
+> Socket.IO server running at ws://0.0.0.0:3000/api/socketio
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3000
+> Socket.IO server running at ws://0.0.0.0:3000/api/socketio
+ ○ Compiling / ...
+ ✓ Compiled / in 7.8s (1740 modules)
+ GET / 200 in 9200ms
+ GET / 200 in 322ms
+ GET / 200 in 563ms
+ GET / 200 in 570ms
+ GET / 200 in 230ms
+ GET / 200 in 209ms
+ GET / 200 in 214ms
+ GET / 200 in 213ms
+ GET / 200 in 205ms
+ ⚠ Cross origin request detected from preview-chat-6cc7f49f-be07-4e45-a1ee-960b9322e5b7.space.z.ai to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3000
+> Socket.IO server running at ws://0.0.0.0:3000/api/socketio
+ ○ Compiling / ...
+ ✓ Compiled / in 10.1s (1740 modules)
+ GET / 200 in 10919ms
+ GET / 200 in 371ms
+ GET / 200 in 323ms
+ ⚠ Cross origin request detected from preview-chat-6cc7f49f-be07-4e45-a1ee-960b9322e5b7.space.z.ai to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET / 200 in 289ms
+   Reload env: .env
+ ✓ Compiled in 704ms (831 modules)
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npx tsx server.ts`[39m
+> Ready on http://0.0.0.0:3000
+> Socket.IO server running at ws://0.0.0.0:3000/api/socketio
+ ○ Compiling / ...
+ ✓ Compiled / in 7.9s (1740 modules)
+ GET / 200 in 9346ms
+ ⚠ Cross origin request detected from preview-chat-6cc7f49f-be07-4e45-a1ee-960b9322e5b7.space.z.ai to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ○ Compiling /api/send-email ...
+ ✓ Compiled /api/send-email in 908ms (952 modules)
+SMTP connection verified successfully
+ POST /api/send-email 200 in 7558ms
+SMTP connection verified successfully
+ POST /api/send-email 200 in 5933ms
+SMTP connection verified successfully
+ POST /api/send-email 200 in 5450ms
+SMTP connection verified successfully
+ POST /api/send-email 200 in 6273ms
+ ✓ Compiled / in 372ms (882 modules)
+ GET / 200 in 990ms
