@@ -51,7 +51,7 @@ import PulseElement from '@/components/PulseElement';
 import PageLoader from '@/components/PageLoader';
 import SkillBar from '@/components/SkillBar';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { translations } from '@/lib/translations';
+import { useContent } from '@/lib/content';
 
 export default function Portfolio() {
   const [currentLang, setCurrentLang] = useState<'en' | 'ar'>('en');
@@ -59,7 +59,7 @@ export default function Portfolio() {
   const prefersReducedMotion = useReducedMotion();
   
   // Get translations early
-  const t = translations[currentLang as keyof typeof translations];
+  const t = useContent(currentLang);
   
   // Conversion tracking state
   const [isSubmitting, setIsSubmitting] = useState(false);
