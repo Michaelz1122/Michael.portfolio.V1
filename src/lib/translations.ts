@@ -57,7 +57,6 @@ export const translations = {
     performanceAnalyticsDesc: "In-depth analysis and reporting on campaign performance and key metrics.",
     budgetManagementService: "Budget Management",
     budgetManagementDesc: "Strategic budget allocation and management for optimal ad spend efficiency.",
-    selectService: "Select This Service",
     chooseYourService: "Choose Your Service",
     whatService: "What service are you interested in?",
     adBudgetRange: "Monthly Ad Budget Range",
@@ -142,7 +141,6 @@ export const translations = {
     enterpriseFeature6: "Monthly Strategy Meetings",
     contactForPricing: "Contact for Custom Pricing",
     choosePlan: "Choose Plan",
-    popular: "Popular",
     // Case Study Details
     pharmacyCampaign: "Pharmacy Campaign Details",
     pharmacyObjective: "Marketing Objective",
@@ -360,7 +358,6 @@ export const translations = {
     performanceAnalyticsDesc: "تحليل وتقارير معمقة حول أداء الحملات والمؤشرات الرئيسية.",
     budgetManagementService: "إدارة الميزانية",
     budgetManagementDesc: "تخصيص وإدارة استراتيجية للميزانية لتحقيق كفاءة الإنفاق الإعلاني المثلى.",
-    selectService: "اختر هذه الخدمة",
     chooseYourService: "اختر خدمتك",
     whatService: "ما الخدمة التي تهتم بها؟",
     adBudgetRange: "نطاق الميزانية الإعلانية الشهرية",
@@ -445,7 +442,6 @@ export const translations = {
     enterpriseFeature6: "اجتماعات استراتيجية شهرية",
     contactForPricing: "تواصل للتسعير المخصص",
     choosePlan: "اختر الباقة",
-    popular: "الأكثر شعبية",
     // Case Study Details
     pharmacyCampaign: "تفاصيل حملة الصيدلية",
     pharmacyObjective: "الهدف التسويقي",
