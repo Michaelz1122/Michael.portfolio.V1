@@ -52,15 +52,23 @@ import PageLoader from '@/components/PageLoader';
 import SkillBar from '@/components/SkillBar';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { inlineContent, useContent, useInlineCopy } from '@/lib/content';
+import { useTextOverrides } from '@/hooks/useTextOverrides';
+import { applyTextOverrides } from '@/lib/text-overrides';
+import { translations } from '@/lib/translations';
 
 export default function Portfolio() {
   const [currentLang, setCurrentLang] = useState<'en' | 'ar'>('en');
   const { toast } = useToast();
   const prefersReducedMotion = useReducedMotion();
+  const textOverrides = useTextOverrides();
   
   // Get translations early
   const t = useContent(currentLang);
   const { getText } = useInlineCopy(currentLang);
+  const t = applyTextOverrides(
+    translations[currentLang as keyof typeof translations],
+    currentLang === 'en' ? textOverrides : {}
+  );
   
   // Conversion tracking state
   const [isSubmitting, setIsSubmitting] = useState(false);
