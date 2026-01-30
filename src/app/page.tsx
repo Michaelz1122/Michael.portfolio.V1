@@ -51,6 +51,7 @@ import PulseElement from '@/components/PulseElement';
 import PageLoader from '@/components/PageLoader';
 import SkillBar from '@/components/SkillBar';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useTextOverrides } from '@/hooks/useTextOverrides';
 import { inlineContent, useContent, useInlineCopy } from '@/lib/content';
 
 export default function Portfolio() {
