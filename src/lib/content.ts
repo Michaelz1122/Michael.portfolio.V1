@@ -8,6 +8,27 @@ const STORAGE_KEY = "portfolio-content-overrides";
 type ContentValue = string | string[];
 export type ContentOverrides = Record<string, ContentValue>;
 
+export const inlineContent = {
+  "inline.toastSuccessDesc": "I'll get back to you within 24 hours.",
+  "inline.emailServiceNotConfigured":
+    "Email service is not properly configured. Please contact me directly via WhatsApp or email.",
+  "inline.emailServiceConfigIssue":
+    "There's an issue with the email service configuration. Please try again later or contact me directly.",
+  "inline.networkError":
+    "Network error. Please check your connection and try again, or contact me directly.",
+  "inline.whatsappMessage":
+    "Hi Michael, I'm interested in your media buying services. Can we discuss?",
+  "inline.selectedLabel": "Selected",
+  "inline.selectedServiceLabel": "Selected Service:",
+  "inline.serviceLabel": "Service:",
+  "inline.budgetLabel": "Budget:",
+  "inline.budgetRangeLabel": "Budget Range (Monthly)",
+  "inline.selectBudgetPlaceholder": "Select your budget range",
+  "inline.chatDirectly": "Chat with me directly",
+  "inline.followProfessional": "Follow my professional page",
+  "inline.connectProfessional": "Connect professionally",
+} as const;
+
 const readOverrides = (): ContentOverrides => {
   if (typeof window === "undefined") {
     return {};
@@ -104,4 +125,21 @@ export const useContent = (lang: "en" | "ar") => {
   }, [lang, overrides]);
 
   return content;
+};
+
+export const useInlineCopy = (lang: "en" | "ar") => {
+  const { overrides } = useContentOverrides();
+
+  const getText = useCallback(
+    (key: keyof typeof inlineContent, fallbackEn: string, fallbackAr: string) => {
+      if (lang === "en") {
+        const override = overrides[key];
+        return typeof override === "string" ? override : fallbackEn;
+      }
+      return fallbackAr;
+    },
+    [lang, overrides]
+  );
+
+  return { getText };
 };

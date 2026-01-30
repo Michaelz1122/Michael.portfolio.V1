@@ -51,7 +51,7 @@ import PulseElement from '@/components/PulseElement';
 import PageLoader from '@/components/PageLoader';
 import SkillBar from '@/components/SkillBar';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useContent } from '@/lib/content';
+import { inlineContent, useContent, useInlineCopy } from '@/lib/content';
 
 export default function Portfolio() {
   const [currentLang, setCurrentLang] = useState<'en' | 'ar'>('en');
@@ -60,6 +60,7 @@ export default function Portfolio() {
   
   // Get translations early
   const t = useContent(currentLang);
+  const { getText } = useInlineCopy(currentLang);
   
   // Conversion tracking state
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -167,7 +168,11 @@ export default function Portfolio() {
           
           toast({
             title: t.toastSuccess,
-            description: currentLang === 'en' ? "I'll get back to you within 24 hours." : "سأتواصل معك خلال 24 ساعة.",
+            description: getText(
+              "inline.toastSuccessDesc",
+              inlineContent["inline.toastSuccessDesc"],
+              "سأتواصل معك خلال 24 ساعة."
+            ),
           });
           setFormData({ name: '', email: '', message: '', service: '', adBudget: '', phone: '' });
           setSelectedService('');
@@ -179,13 +184,17 @@ export default function Portfolio() {
           // Handle specific error messages from the server
           let errorMessage = t.toastSubmissionErrorDesc;
           if (result.error === 'Email service not configured') {
-            errorMessage = currentLang === 'en' 
-              ? "Email service is not properly configured. Please contact me directly via WhatsApp or email." 
-              : "خدمة البريد الإلكتروني غير مهيأة بشكل صحيح. يرجى التواصل معي مباشرة عبر واتساب أو البريد الإلكتروني.";
+            errorMessage = getText(
+              "inline.emailServiceNotConfigured",
+              inlineContent["inline.emailServiceNotConfigured"],
+              "خدمة البريد الإلكتروني غير مهيأة بشكل صحيح. يرجى التواصل معي مباشرة عبر واتساب أو البريد الإلكتروني."
+            );
           } else if (result.error === 'Email service configuration error') {
-            errorMessage = currentLang === 'en' 
-              ? "There's an issue with the email service configuration. Please try again later or contact me directly." 
-              : "هناك مشكلة في تكوين خدمة البريد الإلكتروني. يرجى المحاولة مرة أخرى لاحقًا أو التواصل معي مباشرة.";
+            errorMessage = getText(
+              "inline.emailServiceConfigIssue",
+              inlineContent["inline.emailServiceConfigIssue"],
+              "هناك مشكلة في تكوين خدمة البريد الإلكتروني. يرجى المحاولة مرة أخرى لاحقًا أو التواصل معي مباشرة."
+            );
           }
           
           toast({
@@ -198,9 +207,11 @@ export default function Portfolio() {
         console.error('Form submission error:', error);
         toast({
           title: t.toastSubmissionError,
-          description: currentLang === 'en' 
-            ? "Network error. Please check your connection and try again, or contact me directly." 
-            : "خطأ في الشبكة. يرجى التحقق من اتصالك والمحاولة مرة أخرى، أو التواصل معي مباشرة.",
+          description: getText(
+            "inline.networkError",
+            inlineContent["inline.networkError"],
+            "خطأ في الشبكة. يرجى التحقق من اتصالك والمحاولة مرة أخرى، أو التواصل معي مباشرة."
+          ),
           variant: "destructive",
         });
       } finally {
@@ -215,9 +226,11 @@ export default function Portfolio() {
   };
 
   const handleWhatsAppClick = () => {
-    const message = currentLang === 'en' 
-      ? "Hi Michael, I'm interested in your media buying services. Can we discuss?" 
-      : "مرحباً مايكل، أنا مهتم بخدمات شراء الإعلانات الخاصة بك. هل يمكننا مناقشة ذلك؟";
+    const message = getText(
+      "inline.whatsappMessage",
+      inlineContent["inline.whatsappMessage"],
+      "مرحباً مايكل، أنا مهتم بخدمات شراء الإعلانات الخاصة بك. هل يمكننا مناقشة ذلك؟"
+    );
     const whatsappUrl = `https://wa.me/201069720311?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -810,7 +823,7 @@ export default function Portfolio() {
                     {selectedService === t.service1Title && (
                       <div className="absolute top-4 right-4 z-20">
                         <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold animate-pulse">
-                          {currentLang === 'en' ? 'Selected' : 'محدد'}
+                          {getText("inline.selectedLabel", inlineContent["inline.selectedLabel"], "محدد")}
                         </div>
                       </div>
                     )}
@@ -861,7 +874,7 @@ export default function Portfolio() {
                     {selectedService === t.service2Title && (
                       <div className="absolute top-4 right-4 z-20">
                         <div className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold animate-pulse">
-                          {currentLang === 'en' ? 'Selected' : 'محدد'}
+                          {getText("inline.selectedLabel", inlineContent["inline.selectedLabel"], "محدد")}
                         </div>
                       </div>
                     )}
@@ -913,7 +926,7 @@ export default function Portfolio() {
                     {selectedService === t.service3Title && (
                       <div className="absolute top-4 right-4 z-20">
                         <div className="bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-semibold animate-pulse">
-                          {currentLang === 'en' ? 'Selected' : 'محدد'}
+                          {getText("inline.selectedLabel", inlineContent["inline.selectedLabel"], "محدد")}
                         </div>
                       </div>
                     )}
@@ -965,7 +978,7 @@ export default function Portfolio() {
                     {selectedService === t.service4Title && (
                       <div className="absolute top-4 right-4 z-20">
                         <div className="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-semibold animate-pulse">
-                          {currentLang === 'en' ? 'Selected' : 'محدد'}
+                          {getText("inline.selectedLabel", inlineContent["inline.selectedLabel"], "محدد")}
                         </div>
                       </div>
                     )}
@@ -1017,7 +1030,7 @@ export default function Portfolio() {
                     {selectedService === t.service5Title && (
                       <div className="absolute top-4 right-4 z-20">
                         <div className="bg-cyan-600 text-white px-3 py-1 rounded-full text-xs font-semibold animate-pulse">
-                          {currentLang === 'en' ? 'Selected' : 'محدد'}
+                          {getText("inline.selectedLabel", inlineContent["inline.selectedLabel"], "محدد")}
                         </div>
                       </div>
                     )}
@@ -1069,7 +1082,7 @@ export default function Portfolio() {
                     {selectedService === t.service6Title && (
                       <div className="absolute top-4 right-4 z-20">
                         <div className="bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-semibold animate-pulse">
-                          {currentLang === 'en' ? 'Selected' : 'محدد'}
+                          {getText("inline.selectedLabel", inlineContent["inline.selectedLabel"], "محدد")}
                         </div>
                       </div>
                     )}
@@ -1438,16 +1451,26 @@ export default function Portfolio() {
                     {(formData.service || formData.adBudget) && (
                       <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
                         <p className="text-blue-800 dark:text-blue-200 font-medium mb-2">
-                          {currentLang === 'en' ? 'Selected Service:' : 'الخدمة المختارة:'}
+                          {getText(
+                            "inline.selectedServiceLabel",
+                            inlineContent["inline.selectedServiceLabel"],
+                            "الخدمة المختارة:"
+                          )}
                         </p>
                         {formData.service && (
                           <p className="text-blue-700 dark:text-blue-300 text-sm">
-                            <span className="font-semibold">{currentLang === 'en' ? 'Service:' : 'الخدمة:'}</span> {formData.service}
+                            <span className="font-semibold">
+                              {getText("inline.serviceLabel", inlineContent["inline.serviceLabel"], "الخدمة:")}
+                            </span>{" "}
+                            {formData.service}
                           </p>
                         )}
                         {formData.adBudget && (
                           <p className="text-blue-700 dark:text-blue-300 text-sm">
-                            <span className="font-semibold">{currentLang === 'en' ? 'Budget:' : 'الميزانية:'}</span> {formData.adBudget}
+                            <span className="font-semibold">
+                              {getText("inline.budgetLabel", inlineContent["inline.budgetLabel"], "الميزانية:")}
+                            </span>{" "}
+                            {formData.adBudget}
                           </p>
                         )}
                       </div>
@@ -1517,7 +1540,11 @@ export default function Portfolio() {
                       
                       <div>
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                          {currentLang === 'en' ? 'Budget Range (Monthly)' : 'نطاق الميزانية (شهرياً)'}
+                          {getText(
+                            "inline.budgetRangeLabel",
+                            inlineContent["inline.budgetRangeLabel"],
+                            "نطاق الميزانية (شهرياً)"
+                          )}
                         </label>
                         <select
                           name="adBudget"
@@ -1525,7 +1552,13 @@ export default function Portfolio() {
                           onChange={handleInputChange}
                           className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
                         >
-                          <option value="">{currentLang === 'en' ? 'Select your budget range' : 'اختر نطاق ميزانيتك'}</option>
+                          <option value="">
+                            {getText(
+                              "inline.selectBudgetPlaceholder",
+                              inlineContent["inline.selectBudgetPlaceholder"],
+                              "اختر نطاق ميزانيتك"
+                            )}
+                          </option>
                           <option value="EGP 5,000 - 10,000">EGP 5,000 - 10,000</option>
                           <option value="EGP 10,000 - 25,000">EGP 10,000 - 25,000</option>
                           <option value="EGP 25,000 - 50,000">EGP 25,000 - 50,000</option>
@@ -1563,7 +1596,7 @@ export default function Portfolio() {
                   <div className="space-y-8">
                     <div className="bg-gradient-to-br from-white via-blue-50 to-indigo-50 dark:from-slate-800 dark:via-blue-900/20 dark:to-indigo-900/20 rounded-3xl shadow-2xl p-4 md:p-8 border border-blue-100 dark:border-blue-900/30">
                       <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6">
-                        {currentLang === 'en' ? 'Get In Touch' : 'تواصل معنا'}
+                        {t.getInTouch}
                       </h3>
                       
                       <div className="space-y-6">
@@ -1574,7 +1607,13 @@ export default function Portfolio() {
                             </div>
                             <div className="flex-1">
                               <p className="font-semibold text-slate-800 dark:text-slate-100 text-lg">{t.whatsapp}</p>
-                              <p className="text-slate-600 dark:text-slate-300">{currentLang === 'en' ? 'Chat with me directly' : 'دردش معي مباشرة'}</p>
+                              <p className="text-slate-600 dark:text-slate-300">
+                                {getText(
+                                  "inline.chatDirectly",
+                                  inlineContent["inline.chatDirectly"],
+                                  "دردش معي مباشرة"
+                                )}
+                              </p>
                             </div>
                             <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                               <ArrowRight className="w-4 h-4 text-green-600 dark:text-green-400" />
@@ -1589,7 +1628,13 @@ export default function Portfolio() {
                             </div>
                             <div className="flex-1">
                               <p className="font-semibold text-slate-800 dark:text-slate-100 text-lg">Facebook</p>
-                              <p className="text-slate-600 dark:text-slate-300">{currentLang === 'en' ? 'Follow my professional page' : 'تابع صفحتي المهنية'}</p>
+                              <p className="text-slate-600 dark:text-slate-300">
+                                {getText(
+                                  "inline.followProfessional",
+                                  inlineContent["inline.followProfessional"],
+                                  "تابع صفحتي المهنية"
+                                )}
+                              </p>
                             </div>
                             <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                               <ArrowRight className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -1604,7 +1649,13 @@ export default function Portfolio() {
                             </div>
                             <div className="flex-1">
                               <p className="font-semibold text-slate-800 dark:text-slate-100 text-lg">LinkedIn</p>
-                              <p className="text-slate-600 dark:text-slate-300">{currentLang === 'en' ? 'Connect professionally' : 'تواصل مهنياً'}</p>
+                              <p className="text-slate-600 dark:text-slate-300">
+                                {getText(
+                                  "inline.connectProfessional",
+                                  inlineContent["inline.connectProfessional"],
+                                  "تواصل مهنياً"
+                                )}
+                              </p>
                             </div>
                             <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                               <ArrowRight className="w-4 h-4 text-purple-600 dark:text-purple-400" />

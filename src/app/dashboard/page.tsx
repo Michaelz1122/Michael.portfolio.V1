@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { translations } from "@/lib/translations";
-import { useContentOverrides } from "@/lib/content";
+import { inlineContent, useContentOverrides } from "@/lib/content";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -20,7 +20,10 @@ export default function DashboardPage() {
   const { overrides, updateOverride, clearOverride, resetOverrides } = useContentOverrides();
 
   const entries = useMemo(() => {
-    const baseEntries = Object.entries(translations.en);
+    const baseEntries = Object.entries({
+      ...translations.en,
+      ...inlineContent,
+    });
     const normalizedSearch = search.trim().toLowerCase();
     if (!normalizedSearch) {
       return baseEntries;
