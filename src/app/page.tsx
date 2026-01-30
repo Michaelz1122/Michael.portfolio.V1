@@ -51,15 +51,21 @@ import PulseElement from '@/components/PulseElement';
 import PageLoader from '@/components/PageLoader';
 import SkillBar from '@/components/SkillBar';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useTextOverrides } from '@/hooks/useTextOverrides';
+import { applyTextOverrides } from '@/lib/text-overrides';
 import { translations } from '@/lib/translations';
 
 export default function Portfolio() {
   const [currentLang, setCurrentLang] = useState<'en' | 'ar'>('en');
   const { toast } = useToast();
   const prefersReducedMotion = useReducedMotion();
+  const textOverrides = useTextOverrides();
   
   // Get translations early
-  const t = translations[currentLang as keyof typeof translations];
+  const t = applyTextOverrides(
+    translations[currentLang as keyof typeof translations],
+    currentLang === 'en' ? textOverrides : {}
+  );
   
   // Conversion tracking state
   const [isSubmitting, setIsSubmitting] = useState(false);
