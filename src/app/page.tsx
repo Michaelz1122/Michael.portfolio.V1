@@ -57,6 +57,7 @@ export default function Portfolio() {
   const [currentLang, setCurrentLang] = useState<'en' | 'ar'>('en');
   const { toast } = useToast();
   const prefersReducedMotion = useReducedMotion();
+  const textOverrides = useTextOverrides();
   
   // Get translations early
   const t = useContent(currentLang);
