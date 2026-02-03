@@ -6,7 +6,7 @@ export const setupSocket = (io: Server) => {
     
     // Handle messages
     socket.on('message', (msg: { text: string; senderId: string }) => {
-      // Echo: broadcast message only the client who send the message
+      // Echo: send the message back to the sender only
       socket.emit('message', {
         text: `Echo: ${msg.text}`,
         senderId: 'system',
