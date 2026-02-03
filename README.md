@@ -31,7 +31,7 @@ This scaffold provides a robust foundation built with:
 - **🔐 NextAuth.js** - Complete open-source authentication solution
 
 ### 🎨 Advanced UI Features
-- **📊 TanStack Table** - Headless UI for building tables and datagrids
+- **📊 TanStack Table** - Headless UI for building tables and data grids
 - **🖱️ DND Kit** - Modern drag and drop toolkit for React
 - **📊 Recharts** - Redefined chart library built with React and D3
 - **🖼️ Sharp** - High performance image processing
