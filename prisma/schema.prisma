@@ -31,3 +31,68 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Page {
+  id               String            @id @default(cuid())
+  title            String
+  slug             String            @unique
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  versions         PageVersion[]
+  publishedPointer PublishedPointer?
+}
+
+model PageVersion {
+  id        String        @id @default(cuid())
+  pageId    String
+  status    PublishStatus @default(DRAFT)
+  blocks    Json
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  page      Page          @relation(fields: [pageId], references: [id], onDelete: Cascade)
+}
+
+model PublishedPointer {
+  id            String      @id @default(cuid())
+  pageId        String      @unique
+  pageVersionId String      @unique
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  page          Page        @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  pageVersion   PageVersion @relation(fields: [pageVersionId], references: [id], onDelete: Cascade)
+}
+
+model SiteSection {
+  id               String                 @id @default(cuid())
+  name             String
+  key              String                 @unique
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  versions         SiteSectionVersion[]
+  publishedPointer SitePublishedPointer?
+}
+
+model SiteSectionVersion {
+  id             String        @id @default(cuid())
+  siteSectionId  String
+  status         PublishStatus @default(DRAFT)
+  blocks         Json
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  siteSection    SiteSection   @relation(fields: [siteSectionId], references: [id], onDelete: Cascade)
+}
+
+model SitePublishedPointer {
+  id                 String             @id @default(cuid())
+  siteSectionId      String             @unique
+  siteSectionVersionId String           @unique
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  siteSection        SiteSection        @relation(fields: [siteSectionId], references: [id], onDelete: Cascade)
+  siteSectionVersion SiteSectionVersion @relation(fields: [siteSectionVersionId], references: [id], onDelete: Cascade)
+}
