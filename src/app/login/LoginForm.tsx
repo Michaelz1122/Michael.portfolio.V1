@@ -5,12 +5,12 @@ import type { FormEvent } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function AdminLoginForm() {
+export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,7 +21,7 @@ export default function AdminLoginForm() {
     setIsSubmitting(true);
 
     const response = await signIn("credentials", {
-      username,
+      email,
       password,
       redirect: false,
       callbackUrl,
@@ -34,7 +34,7 @@ export default function AdminLoginForm() {
       return;
     }
 
-    setError("Invalid username or password.");
+    setError("Invalid email or password.");
   };
 
   return (
@@ -47,14 +47,14 @@ export default function AdminLoginForm() {
 
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <label className="flex flex-col gap-2 text-sm font-medium">
-            Username
+            Email
             <input
               className="rounded-lg border px-3 py-2 text-sm"
-              name="username"
-              type="text"
-              autoComplete="username"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               required
             />
           </label>
