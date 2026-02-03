@@ -78,13 +78,14 @@ model SiteSection {
 }
 
 model SiteSectionVersion {
-  id             String        @id @default(cuid())
-  siteSectionId  String
-  status         PublishStatus @default(DRAFT)
-  blocks         Json
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  siteSection    SiteSection   @relation(fields: [siteSectionId], references: [id], onDelete: Cascade)
+  id               String               @id @default(cuid())
+  siteSectionId    String
+  status           PublishStatus        @default(DRAFT)
+  blocks           Json
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  siteSection      SiteSection          @relation(fields: [siteSectionId], references: [id], onDelete: Cascade)
+  publishedPointer SitePublishedPointer?
 }
 
 model SitePublishedPointer {
